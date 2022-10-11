@@ -10,5 +10,5 @@ DISCLAIMER: The provided source code does NOT include experiments with the gener
 * One example of an adversarial mask (UAP-S and UAP-O) to evaluate defense methods.
 * Please refer to the [original repository](https://github.com/chenhongge/SA_DQN) for the code and State-Adversarial DQN models used in our paper. 
 
-Result on Pong DQN agents:
-<img src="images/Pong_plot.png." width="600">
+<br />An Example Result on Pong DQN agents:<br />
+<img src="images/Pong_plot.png" width="400">
