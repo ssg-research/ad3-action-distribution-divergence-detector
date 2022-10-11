@@ -31,7 +31,7 @@ This project is licensed under Apache License Version 2.0. By using, reproducing
 ## Citation
 If you find our work useful in your research, you can cite the paper as follows:
 ```
-@InProceedings{tekgul2022Ad3,
+@inproceedings{tekgul2022Ad3,
 author="Tekgul, Buse G. A.
 and Wang, Shelly
 and Marchal, Samuel
