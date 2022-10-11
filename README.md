@@ -11,9 +11,10 @@ DISCLAIMER: The provided source code does NOT include experiments with the gener
 * Please refer to the [original repository](https://github.com/chenhongge/SA_DQN) for the code and State-Adversarial DQN models used in our paper. 
 
 ## Setup
-This code has been tested to work with GPU (GeForce GTX 1060 6GB) and CUDA=10.1. Dependencies and OpenAI baselines can be installed by following the steps below:
+This code has been tested to work with GPU (GeForce GTX 1060 6GB) and CUDA=10.1. We recommend using conda to run and replicate experiments smoothly. Dependencies and OpenAI baselines can be installed by following the steps below:
 ```
 conda create -n ad3 python=3.7
+conda activate ad3
 pip3 install -r requirements.txt
 cd src
 git clone https://github.com/openai/baselines.git
