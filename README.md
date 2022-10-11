@@ -24,3 +24,24 @@ pip3 install -e .
 
 <br />An Example Result on Pong DQN agents:<br />
 <img src="images/Pong_plot.png" width="400">
+
+## Licence
+This project is licensed under Apache License Version 2.0. By using, reproducing or distributing to the project, you agree to the license and copyright terms therein and release your version under these terms.
+
+## Citation
+If you find our work useful in your research, you can cite the paper as follows:
+```
+@InProceedings{tekgul2022Ad3,
+author="Tekgul, Buse G. A.
+and Wang, Shelly
+and Marchal, Samuel
+and Asokan, N.",
+title="Real-Time Adversarial Perturbations Against Deep Reinforcement Learning Policies: Attacks and Defenses",
+booktitle="Computer Security -- ESORICS 2022",
+year="2022",
+publisher="Springer Nature Switzerland",
+address="Cham",
+pages="384--404",
+}
+```
+
