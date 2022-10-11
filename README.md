@@ -15,6 +15,7 @@ This code has been tested to work with GPU (GeForce GTX 1060 6GB) and CUDA=10.1.
 ```
 conda create -n ad3 python=3.7
 pip3 install -r requirements.txt
+cd src
 git clone https://github.com/openai/baselines.git
 cd baselines
 pip3 install -e .
