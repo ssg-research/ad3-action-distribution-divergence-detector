@@ -80,9 +80,10 @@ def dqn_train(args, env, device, agent=None, advmask=None):
                     end = time.time()
                     print("{} updates has been done out of total {} of updates in training, \n Last {} training episodes: mean/median reward {:.1f}/{:.1f}, min/max reward {:.1f}/{:.1f}\n"
                         .format(timestep, args.total_timesteps,
-                        len(episode_rewards), np.mean(episode_rewards),
-                        np.median(episode_rewards), np.min(episode_rewards),
-                        np.max(episode_rewards)))
+                            int(total_num_steps / (end - start)),
+                            len(episode_rewards), np.mean(episode_rewards),
+                            np.median(episode_rewards), np.min(episode_rewards),
+                            np.max(episode_rewards)))
         # save for every interval-th episode or for the last epoch
         if (timestep% (args.dqn_save_interval) == 0) and args.save_dir != "":
             torch.save(agent.net.state_dict(), agent.model_path + model_name) 
@@ -153,16 +154,17 @@ def policy_train(args, envs, device, agent=None, advmask=None):
         if j % args.policy_log_interval == 0 and len(episode_rewards) > 1:
             total_num_steps = (j + 1) * args.num_processes * args.policy_num_steps
             end = time.time()
-            print(
-                "Updates {}, num timesteps {}, FPS {} \n Last {} training episodes: mean/median reward {:.1f}/{:.1f}, min/max reward {:.1f}/{:.1f}\n"
-                .format(j, total_num_steps,
-                        int(total_num_steps / (end - start)),
-                        len(episode_rewards), np.mean(episode_rewards),
-                        np.median(episode_rewards), np.min(episode_rewards),
-                        np.max(episode_rewards), dist_entropy, value_loss,
-                        action_loss))
-
-    envs.close()   
+            print("{} updates has been done out of total {} of updates in training, \nFPS {}, Last {} training episodes: mean/median reward {:.1f}/{:.1f}, min/max reward {:.1f}/{:.1f}\n"
+                .format(j, args.total_timesteps,
+                    int(total_num_steps / (end - start)),
+                    len(episode_rewards), np.mean(episode_rewards),
+                    np.median(episode_rewards), np.min(episode_rewards),
+                    np.max(episode_rewards), dist_entropy, value_loss,
+                    action_loss))
+    # close the environment and save the last trained state of the policy
+    print("Saving the final state of the policy...")
+    torch.save(agent.net.state_dict(), agent.model_path + model_name)
+    env.close()  
     
 
 
