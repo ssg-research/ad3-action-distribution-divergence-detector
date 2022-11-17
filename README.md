@@ -22,6 +22,15 @@ git clone https://github.com/openai/baselines.git
 cd baselines
 pip3 install -e .
 ```
+## Training DRL Agents
+DQN, A2C and PPO agents are implemented for Atari 2600 Games task. We have prepared a training script that can be run by sh scripts/train.sh in order for you to generate agents with a high performance. Alternatively, you can call the python scripts directly and modify arguments by checking them from `main.py`. You can find the model saved into "output/{Game name}/{Algorithm name}/train/model.pt"<br/>
+
+Once you have trained agents, you can deploy them in a test environment, e.g.,:
+```
+python  main.py  --env-name Pong --game-mode test --victim-agent-mode dqn
+python  main.py  --env-name Breakout --game-mode test --victim-agent-mode ppo
+python  main.py  --env-name Freeway --game-mode test --victim-agent-mode a2c --allow-early-resets True
+```
 
 <br />An Example Result on Pong DQN agents:<br />
 <img src="images/Pong_plot.png" width="400">

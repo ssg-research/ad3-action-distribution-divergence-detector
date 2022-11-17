@@ -11,7 +11,7 @@ from agents.models import DQNnet
 from rl_utils.experience_replay import replay_buffer
 from agents.median_pool import MedianPool2d
 
-# linear exploration schedule
+# Linear exploration schedule
 class linear_schedule:
     def __init__(self, total_timesteps, final_ratio, init_ratio=1.0):
         self.total_timesteps = total_timesteps
@@ -34,9 +34,6 @@ class dqn_agent(base_agent):
         self.target_net = copy.deepcopy(self.net)
         # make sure the target net has the same weights as the network
         self.target_net.load_state_dict(self.net.state_dict())
-        #if self.args.cuda:
-        #    self.net.cuda()
-        #    self.target_net.cuda()
         self.net.to(self.device)
         self.target_net.to(self.device)
         # define the optimizer
@@ -47,28 +44,15 @@ class dqn_agent(base_agent):
         self.explore_eps = self.args.init_ratio
         self.exploration_schedule = linear_schedule(int(self.args.total_timesteps * self.args.exploration_fraction), \
                                                     self.args.final_ratio, self.args.init_ratio)
-        # put median filter
-        #self.filter = MedianPool2d()
 
     # select actions
     def select_action(self, obs, explore_eps=0.0):
         with torch.no_grad():
-            #if self.args.filter_defense:
-            #    obs = self.filter.forward(obs)
             action_value = self.net(obs)
-        #with torch.no_grad():
-        #    action_value = self._get_action_values(obs)
-        #action_value = action_value.cpu().numpy().squeeze()
-        # select actions
-        #action = np.argmax(action_value) if random.random() > explore_eps else np.random.randint(action_value.shape[0])
-        #return action, softmax(action_value)
         action = torch.argmax(action_value) if random.random() > explore_eps else torch.randint(0, action_value.shape[1]-1,size=(1,))
         return action.reshape(1,1), action_value
 
     def remember(self, obs, action, reward, next_obs, done):
-        #if self.args.filter_defense:
-        #    obs = self.filter.forward(obs)
-        #    next_obs = self.filter.forward(next_obs)
         self.buffer.add(obs.to(self.device), action.to(self.device), reward.to(self.device), next_obs.to(self.device), float(done))
 
     def update_agent(self, timestep, advmask=None):
@@ -87,23 +71,11 @@ class dqn_agent(base_agent):
         obses, actions, rewards, obses_next, dones = samples
         
         # convert the data to tensor
-        #obses = self._get_tensors(obses)
-        #actions = torch.tensor(actions, dtype=torch.int64).unsqueeze(-1)
-        #rewards = torch.tensor(rewards, dtype=torch.float32).unsqueeze(-1)
-        #obses_next = self._get_tensors(obses_next)
-        #dones = torch.tensor(1 - dones, dtype=torch.float32).unsqueeze(-1)
         obses = torch.cat(obses) 
         actions = torch.cat(actions)
         rewards = torch.cat(rewards)
         obses_next = torch.cat(obses_next)
         dones = torch.tensor(1 - dones, dtype=torch.float32).to(self.device)
-        # convert into gpu
-        #if self.args.cuda:
-        #    obses = obses.to(self.device)
-        #    obses_next = obses_next.to(device)
-        #    actions = actions.cuda()
-        #    rewards = rewards.cuda()
-        #    dones = dones.cuda()
         # calculate the target value
         with torch.no_grad():
             # if use the double network architecture
