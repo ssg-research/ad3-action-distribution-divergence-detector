@@ -41,12 +41,8 @@ class a2c_agent(base_agent):
 
         self.optimizer = torch.optim.RMSprop(self.net.parameters(), args.a2c_lr, eps=args.a2c_eps, alpha=args.a2c_alpha)
 
-        # put median filter
-        #self.filter = MedianPool2d()
 
     def select_action(self, inputs, rnn_hxs, masks, log_probs=False, deterministic=True):
-        #if self.args.filter_defense:
-        #    inputs = self.filter.forward(inputs)
         value, actor_features, rnn_hxs = self.net(inputs, rnn_hxs, masks)
         dist = self.net.dist(actor_features)
         action = dist.mode() if deterministic else dist.sample()
@@ -62,8 +58,6 @@ class a2c_agent(base_agent):
             return value, action, action_log_probs, rnn_hxs
 
     def get_value(self, inputs, rnn_hxs, masks):
-        #if self.args.filter_defense:
-        #    inputs = self.filter.forward(inputs)
         value, _, _ = self.net(inputs, rnn_hxs, masks)
         return value
 
@@ -91,7 +85,6 @@ class a2c_agent(base_agent):
         (value_loss * self.value_loss_coef + action_loss -
          dist_entropy * self.entropy_coef).backward()
 
-        #if self.acktr == False:
         nn.utils.clip_grad_norm_(self.net.parameters(),
                                      self.max_grad_norm)
 
@@ -117,7 +110,6 @@ class a2c_agent(base_agent):
             (value_loss * self.value_loss_coef + action_loss -
             dist_entropy * self.entropy_coef).backward()
 
-            #if self.acktr == False:
             nn.utils.clip_grad_norm_(self.net.parameters(),
                                         self.max_grad_norm)
 
@@ -126,8 +118,6 @@ class a2c_agent(base_agent):
         return value_loss.item(), action_loss.item(), dist_entropy.item()
 
     def evaluate_actions(self, inputs, rnn_hxs, masks, action):
-        #if self.args.filter_defense:
-        #    inputs = self.filter.forward(inputs)
         value, actor_features, rnn_hxs = self.net(inputs, rnn_hxs, masks)
         dist = self.net.dist(actor_features)
 

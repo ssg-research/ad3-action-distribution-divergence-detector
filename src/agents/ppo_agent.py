@@ -42,17 +42,12 @@ class ppo_agent(base_agent):
 
         self.optimizer = torch.optim.Adam(self.net.parameters(), lr=self.initial_lr, eps=args.ppo_eps)
 
-        # put median filter for defence
-        #self.filter = MedianPool2d()
 
     def select_action(self, inputs, rnn_hxs, masks, log_probs=False, deterministic=True):
-        #if self.args.filter_defense:
-        #    inputs = self.filter.forward(inputs)
 
         value, actor_features, rnn_hxs = self.net(inputs, rnn_hxs, masks)
         dist = self.net.dist(actor_features)
 
-        #action = dist.mode() if random.random() > explore_eps else dist.sample()
         action = dist.mode() if deterministic else dist.sample()
 
         action_log_probs = dist.log_probs(action)
@@ -66,10 +61,6 @@ class ppo_agent(base_agent):
             return value, action, action_log_probs, rnn_hxs
 
     def get_value(self, inputs, rnn_hxs, masks):
-
-        #if self.args.filter_defense:
-        #    inputs = self.filter.forward(inputs)
-
         value, _, _ = self.net(inputs, rnn_hxs, masks)
         return value
 
@@ -141,8 +132,6 @@ class ppo_agent(base_agent):
         return value_loss_epoch, action_loss_epoch, dist_entropy_epoch
 
     def evaluate_actions(self, inputs, rnn_hxs, masks, action):
-        #if self.args.filter_defense:
-        #    inputs = self.filter.forward(inputs)
         value, actor_features, rnn_hxs = self.net(inputs, rnn_hxs, masks)
         dist = self.net.dist(actor_features)
 

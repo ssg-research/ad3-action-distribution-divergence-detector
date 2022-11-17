@@ -1,3 +1,7 @@
+############################################################################
+# Modified from https://github.com/williamd4112/RL-Adventure               #
+############################################################################
+
 __all__ = ['Monitor', 'get_monitor_files', 'load_results']
 
 from gym.core import Wrapper
