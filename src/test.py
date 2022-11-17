@@ -76,7 +76,7 @@ def calculate_games_won(args, reward_arr, detection_arr):
 def setup_test_agent_env(args):
     device = torch.device("cuda:0" if args.cuda else "cpu")
     # Environment, create
-    env = make_vec_envs(args.env_name, args.seed + 1000, 1, None, args.env_name + 'train_dataset/', device=device,
+    env = make_vec_envs(args.env_name, args.seed + 1000, 1, None, args.env_name + 'output/env_logs', device=device,
                         allow_early_resets=args.allow_early_resets)
     # Environment, set seeds
     set_seeds(args)
@@ -246,14 +246,12 @@ def test(args):
 
     env.close()
 
-
-
     # Measurements, save statistics to files, log and print
     # TODO: Some results are shown as zero, check why
     # np.save(reward_path, total_rewards)
     print("Average reward: {:.2f} std: {:.2f}".format(np.mean(total_rewards), np.std(total_rewards)))
-    print("Tmax: {:.3f} secs".format(1.0/60.0 - np.mean(time_agent)))
-    logging.info("Tmax: {:.3f} secs".format(1.0/60.0 - np.mean(time_agent)))
+    print("Tmax: {:.6f} secs".format(1.0/60.0 - np.mean(time_agent)))
+    logging.info("Tmax: {:.6f} secs".format(1.0/60.0 - np.mean(time_agent)))
     logging.info("Average action change rate: {:.3f}".format(100 * np.sum(action_change) / frame_idx_total))
     logging.info("Average reward: {:.2f}".format(np.mean(total_rewards)))
     logging.info("Average reward variance: {:.2f}".format(np.std(total_rewards)))
