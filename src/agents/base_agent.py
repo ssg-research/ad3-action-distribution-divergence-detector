@@ -1,5 +1,5 @@
-import datetime
-from rl_utils.logger import Logger
+import os
+import shutil
 
 class base_agent:
 
@@ -15,17 +15,18 @@ class base_agent:
             model_name = agent_mode
         
         if args.game_mode == "train":
-            self.logger_path = "./output/logs/" + args.env_name + "/" + model_name + "/" + args.game_mode +  "_" + self._get_date() + "/"
-            self.model_path = "./output/nets/" + args.env_name + "/" + model_name + "/" + args.game_mode + "/"
-            self.logger = Logger(args.env_name + " " + model_name, self.logger_path, self.model_path) 
+            self.model_path = "./output/" + args.env_name + "/" + model_name + "/" + args.game_mode + "/"
         else:
-            self.model_path = "./output/nets/" + args.env_name + "/" + model_name + "/" + args.game_mode + "/" + name  
-            self.defense_path = "./output/nets/" + args.env_name + "/" + model_name + "/" + args.game_mode + "/" 
+            self.model_path = "./output/" + args.env_name + "/" + model_name + "/" + args.game_mode + "/" + name  
+            self.defense_path = "./output/" + args.env_name + "/" + model_name + "/" + args.game_mode + "/" 
+
+        if os.path.exists(self.model_path):
+            shutil.rmtree(self.model_path, ignore_errors=True)
+        os.makedirs(self.model_path)
+
 
     def save_run(self, score, step, run):
-        self.logger.add_score(score)
-        #self.logger.add_step(step)
-        #self.logger.add_run(run)
+        #self.logger.add_score(score)
         pass
 
     def select_action(self, obs, explore_eps=0.5, rnn_hxs=None, masks=None, deterministic=False):
@@ -36,7 +37,3 @@ class base_agent:
 
     def update_agent(self, total_step, rollouts=None, advmask=None):
         pass
-
-    def _get_date(self):
-        return str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M'))
-
