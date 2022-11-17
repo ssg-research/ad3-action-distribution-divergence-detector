@@ -1,3 +1,7 @@
+############################################################################
+# Modified from https://github.com/williamd4112/RL-Adventure               #
+############################################################################
+
 import numpy as np
 import os
 os.environ.setdefault('PATH', '')
