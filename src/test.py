@@ -73,8 +73,6 @@ def calculate_games_won(args, reward_arr, detection_arr):
     return loose_games, defense_loose_arr
 
 
-
-
 def setup_test_agent_env(args):
     device = torch.device("cuda:0" if args.cuda else "cpu")
     # Environment, create
@@ -83,10 +81,7 @@ def setup_test_agent_env(args):
     # Environment, set seeds
     set_seeds(args)
     # Victim, load a trained agent
-    if args.adversarial_retraining_defense == True:
-        model_name = 'adversarial_model.pt'
-    else:
-        model_name = 'model.pt'
+    model_name = 'model.pt'
     victim = True
     if args.victim_agent_mode == 'dqn':
         agent = dqn_agent(env, args, device, model_name, victim)
@@ -94,6 +89,8 @@ def setup_test_agent_env(args):
         agent = a2c_agent(env, args, device, model_name, victim)
     elif args.victim_agent_mode == 'ppo':
         agent = ppo_agent(env, args, device, model_name, victim)
+    if args.load_from is not None:
+        agent.model_path = args.load_from
     agent.net.load_state_dict(torch.load(agent.model_path, map_location=lambda storage, loc: storage))
     # Initilaizations related to actor-critic models
     recurrent_hidden_states = torch.zeros(1, 1)
@@ -103,8 +100,10 @@ def setup_test_agent_env(args):
 
 
 def test(args):
-    image_path, noise_path, reward_path, training_data_path, reward_step_path, detection_step_path = make_files_and_paths(
-        args)
+    #image_path, noise_path, reward_path, training_data_path, reward_step_path, detection_step_path = make_files_and_paths(
+    #    args)
+    #detection_step_path = args.env_name + '_rewards' + '/' + 'victim_' + args.victim_agent_mode + '_attacker_' + \
+    #                     '_ac' + str(args.action_threshold) + "_detection_per_steps_{}" + '.npy'
     logging.basicConfig(filename=(args.env_name + '_' + args.victim_agent_mode + '_' + 'measurements.log'),
                         level=logging.DEBUG)
     # fstats = open(args.env_name + '_' + args.victim_agent_mode + '_' + 'distancestats.txt','a+')
@@ -133,9 +132,6 @@ def test(args):
     action_change = np.zeros(games_to_play - args.attacker_game_plays)
     total_alarms = np.zeros(games_to_play - args.attacker_game_plays)
     total_action_change = 0
-
-    # Adversary, initialize
-    adv = attacker_agent(env, agent, training_data_path, noise_path, device, args)
 
     # load the adversarial defense, if any
     if args.visual_foresight_defense == True or args.detection_method == "VF":
@@ -188,6 +184,7 @@ def test(args):
                                                                                  predicted_dist=predicted_dist,
                                                                                  detection_alarm=alarm)
             action_change_count += action_change_val
+            time_agent[game_id - args.attacker_game_plays] += time_agent_val
 
             # if args.env_name == "Breakout" and frame_idx_ingame > 3000 and frame_idx_ingame % 100 == 0:
             #     r = random.randint(0, env.action_space.n - 1)
@@ -222,16 +219,11 @@ def test(args):
                     predicted_action, predicted_dist = agent.select_action(torch.ceil(next_obs_predict))
                     end = time.time()
                     defense_time.append(end-start)
-		
-	        # Adversary, collect data if necessary 
-            adv.collect(obs, action, action_distribution, game_id, frame_idx_ingame, args.attacker_game_plays)
 
             if args.save_detection_scores and game_id >= args.attacker_game_plays:
                 cur_reward += reward.item()
                 game_reward_per_step.append(cur_reward)
                 game_detection_per_step.append(alarm)
-
-
 
             # Environment, prepare for next obs, print if game ends
             obs = next_obs.clone()
@@ -239,11 +231,15 @@ def test(args):
             frame_idx_ingame += 1
 
             if 'episode' in info[0].keys():
-
+                if game_id >= args.attacker_game_plays:
+                    total_rewards[game_id - args.attacker_game_plays] = info[0]['episode']['r']
+                    action_change[game_id - args.attacker_game_plays] = action_change_count / frame_idx_ingame
+                    total_action_change += action_change_count
+                    time_agent[game_id - args.attacker_game_plays] = time_agent[game_id - args.attacker_game_plays] / frame_idx_ingame
                 if args.detection_method != "none" and game_id >= args.attacker_game_plays:
                     total_alarms[game_id - args.attacker_game_plays] = detect_mod.is_alarmed()
                     detect_mod.save_and_clean(info[0]['episode']['r'], args.eps)
-                print('Game id: {}, score: {}, total number of state-action pairs: {}'.format(game_id,
+                print('Game id: {}, score: {}, total number of state-action pairs: {}'.format(game_id+1,
                                                                                               info[0]['episode']['r'],
                                                                                               frame_idx_ingame))
                 break
@@ -254,8 +250,11 @@ def test(args):
 
     # Measurements, save statistics to files, log and print
     # TODO: Some results are shown as zero, check why
-    np.save(reward_path, total_rewards)
+    # np.save(reward_path, total_rewards)
     print("Average reward: {:.2f} std: {:.2f}".format(np.mean(total_rewards), np.std(total_rewards)))
+    print("Average time spent by agent between two states: {:.6f} milisecs".format(np.mean(time_agent) * 1000))
+    logging.info("Average time spent by agent between two states: {:.6f} milisecs".format(np.mean(time_agent) * 1000))
+    logging.info("Average action change rate: {:.4f}".format(100 * np.sum(action_change) / frame_idx_total))
     logging.info("Average reward: {:.2f}".format(np.mean(total_rewards)))
     logging.info("Average reward variance: {:.2f}".format(np.std(total_rewards)))
 
@@ -283,12 +282,6 @@ def test(args):
         logging.info("Visual Foresight: ON")
         print("Average game lost (with no detection): {}".format(np.mean(loose_game)))
         logging.info("Average game lost (with no detection): {}".format(np.mean(loose_game)))
-
-
-    print("Average time spent by agent between two states: {:.6f} milisecs".format(np.mean(time_agent) * 1000))
-    logging.info("Average time spent by agent between two states: {:.6f} milisecs".format(np.mean(time_agent) * 1000))
-    print("Average action change rate: {:.4f}".format(100 * total_action_change / frame_idx_total))
-    logging.info("Average action change rate: {:.4f}".format(100 * np.sum(action_change) / frame_idx_total))
 
     if args.visual_foresight_defense == True:
         print("Average time for visual foresight defense: {} milisecs".format(np.mean(defense_time)))

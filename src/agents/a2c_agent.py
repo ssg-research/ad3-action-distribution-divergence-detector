@@ -11,7 +11,6 @@ import torch.nn as nn
 
 from agents.models import A2Cnet
 from agents.base_agent import base_agent
-from agents.median_pool import MedianPool2d
 
 # linear exploration schedule
 class linear_schedule:

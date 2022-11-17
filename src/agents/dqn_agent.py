@@ -13,7 +13,6 @@ import torch.nn as nn
 from agents.base_agent import base_agent
 from agents.models import DQNnet
 from rl_utils.experience_replay import replay_buffer
-from agents.median_pool import MedianPool2d
 
 # Linear exploration schedule
 class linear_schedule:

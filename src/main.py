@@ -25,13 +25,14 @@ def get_args():
     parse.add_argument('--env-type', type=str, default='atari', help='the environment type')
     parse.add_argument('--game-mode', default='train', help="Choose from available modes: train, test, Default is 'train'.")
     parse.add_argument('--victim-agent-mode', default='dqn', help="Choose from available RL algorithms: dqn, a2c, ppo, Default is 'dqn'.")
+    parse.add_argument('--load-from', default=None, help="Load a previously saved agent")
     parse.add_argument('--seed', type=int, default=123, help='the random seeds')
     parse.add_argument('--num-processes',type=int, default=16, help='how many training CPU processes to use (default: 16)')
     parse.add_argument('--cuda', type=bool, default=True, help='if use the gpu')
     parse.add_argument('--grad-norm-clipping', type=float, default=10, help='the gradient clipping')
     parse.add_argument('--total-timesteps', type=int, default=int(2e7), help='the total timesteps to train network')   #int(2e7)
     parse.add_argument('--total-game-plays', type=int, default=int(10), help='the total number of independent game plays in test time')
-    parse.add_argument('--save-dir', type=str, default='saved_models/', help='the folder to save models')
+    #parse.add_argument('--save-dir', type=str, default='saved_models/', help='the folder to save models')
     parse.add_argument('--display-interval', type=int, default=5, help='the display interval')
     parse.add_argument('--render', type=bool, default=False, help='render environment')
     parse.add_argument('--save-frames', type=bool, default=True, help= 'save frames for attack or no attack conditions')
@@ -95,8 +96,14 @@ def get_args():
     parse.add_argument('--use-saved-game', action='store_true', help="Use saved game data to run detection environment.")
     parse.add_argument('--detection-method-train', action='store_true',
                        help="Use saved game data to run detection environment.")
-    args = parse.parse_args()
 
+    # Attack related arguments
+    parse.add_argument('--adversary', default='none', help="Choose from available modes: none, random, uap_s, uap_f, fgsm, deepfool, obs_fgsm_wb, obs_fgsm_wb_ingame. Default is 'none'.")
+    parse.add_argument('--attack-ratio', type=float, default=float(1.0), help="Attack ratio. The percentage of the time steps where we apply adversarial attacks")
+    parse.add_argument('--alternate-attack', action='store_true', help="Alternate between attack and no attack with attack duration")
+    parse.add_argument('--attacker-game-plays', type=int, default=int(0), help='the total number of independent game plays in training time for attack')
+
+    args = parse.parse_args()
     return args
 
 
