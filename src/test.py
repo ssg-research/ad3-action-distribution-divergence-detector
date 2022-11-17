@@ -252,9 +252,9 @@ def test(args):
     # TODO: Some results are shown as zero, check why
     # np.save(reward_path, total_rewards)
     print("Average reward: {:.2f} std: {:.2f}".format(np.mean(total_rewards), np.std(total_rewards)))
-    print("Average time spent by agent between two states: {:.6f} milisecs".format(np.mean(time_agent) * 1000))
-    logging.info("Average time spent by agent between two states: {:.6f} milisecs".format(np.mean(time_agent) * 1000))
-    logging.info("Average action change rate: {:.4f}".format(100 * np.sum(action_change) / frame_idx_total))
+    print("Tmax: {:.3f} secs".format(1.0/60.0 - np.mean(time_agent)))
+    logging.info("Tmax: {:.3f} secs".format(1.0/60.0 - np.mean(time_agent)))
+    logging.info("Average action change rate: {:.3f}".format(100 * np.sum(action_change) / frame_idx_total))
     logging.info("Average reward: {:.2f}".format(np.mean(total_rewards)))
     logging.info("Average reward variance: {:.2f}".format(np.std(total_rewards)))
 
