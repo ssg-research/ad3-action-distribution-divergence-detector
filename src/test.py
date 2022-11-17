@@ -76,7 +76,7 @@ def calculate_games_won(args, reward_arr, detection_arr):
 def setup_test_agent_env(args):
     device = torch.device("cuda:0" if args.cuda else "cpu")
     # Environment, create
-    env = make_vec_envs(args.env_name, args.seed + 1000, 1, None, args.env_name + 'output/env_logs', device=device,
+    env = make_vec_envs(args.env_name, args.seed + 1000, 1, None, 'output/env_logs', device=device,
                         allow_early_resets=args.allow_early_resets)
     # Environment, set seeds
     set_seeds(args)
