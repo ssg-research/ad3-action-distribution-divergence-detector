@@ -7,16 +7,17 @@ def parse_key(key_str):
     return game, frames, percentile, alar_perc, queue_size
 
 BASH_HEADER = "#!/usr/bin/env bash"
-FILENAME = "./scripts/detection_experiments.sh"
+FILENAME = "detection_experiments.sh"
 SEED = 1234
 
 ## All the possible scenarios
 ENV_NAMES = ["Pong", "Breakout", "Freeway"]
-ADVERSARIES = ["none", "fgsm", "uap_s", "uap_f", "obs_fgsm_wb", "obs_fgsm_wb_ingame"]
+ADVERSARIES = ["uaps", "uapf", "osfwu"]
+
 
 AGENTS = ["a2c", "dqn", "ppo"]
 
-ATTACK_EPS = "0.005"
+ATTACK_EPS = "0.01"
 
 ## (epsilon, attack_ratio)
 EPS_ATTACK_RATIO = {
@@ -58,7 +59,7 @@ with open(FILENAME, "w") as f:
     f.write(BASH_HEADER)
 
     for env, adv, agent in itertools.product(ENV_NAMES, ADVERSARIES, AGENTS):
-        f.write("\n\n####{} {} {} #####\n\n".format(env, adv, agent))
+        f.write("\n#### {} {} {} #####\n".format(env, adv, agent))
 
 
         base_line = " ".join(["python main.py", "--game-mode test", "--env-name", env,
@@ -75,27 +76,29 @@ with open(FILENAME, "w") as f:
             if adv == "none":
                 training_line = " ".join([base_line, "--detection-method-train",
                                           "--detection-game-plays", det_game, "--seed", str(SEED)])
-                f.write("\n" + training_line + "\n\n")
+                f.write(training_line + "\n")
 
             # for skip_frame, percentile, alarm_perc, queue_size in \
             #         itertools.product(SKIPPED_FRAMES, PERCENTILES, ALARM_PERCENTAGES, QUEUE_SIZES):
 
-            for key_str in key_val:
-                key_str = key_val[env][agent]
-                game, skip_frame, percentile, alarm_perc, queue_size = parse_key(key_str)
+            #for key_str in key_val:
+            key_str = key_val[env][agent]
+            game, skip_frame, percentile, alarm_perc, queue_size = parse_key(key_str)
 
-                if adv =="none":
-                    game_plays = TOTAL_GAME_PLAYS
-                else:
-                    game_plays = TOTAL_GAME_PLAYS
+            if adv =="none":
+                game_plays = TOTAL_GAME_PLAYS
+            else:
+                game_plays = TOTAL_GAME_PLAYS
 
-                test_line = " ".join([base_line, "--detection-game-plays", det_game, "--total-game-plays",
-                                      str(game_plays),
-                                      "--skipped-frames", skip_frame, "--percentile", percentile,
-                                      "--alarm-percentage", alarm_perc, "--queue-size", queue_size,
-                                      "--seed", str(SEED + 20), "--save-detection-scores"])
+            test_line = " ".join([base_line, "--detection-game-plays", det_game, "--total-game-plays",
+                                    str(game_plays),
+                                    "--skipped-frames", skip_frame, "--percentile", percentile,
+                                    "--alarm-percentage", alarm_perc, "--queue-size", queue_size,
+                                    "--seed", str(SEED + 20), "--save-detection-scores"])
 
-                f.write(test_line + "\n")
+            f.write(test_line + "\n")
+            print(key_str)
+            print(test_line)
 
             f.write("\n")
 
