@@ -98,7 +98,7 @@ def get_args():
                        help="Use saved game data to run detection environment.")
 
     # Attack related arguments
-    parse.add_argument('--adversary', default='none', help="Choose from available modes: none, random, uap_s, uap_f, fgsm, deepfool, obs_fgsm_wb, obs_fgsm_wb_ingame. Default is 'none'.")
+    parse.add_argument('--adversary', default='none', help="Choose from available modes: none, random, uaps, uapf, oswfu. Default is 'none'.")
     parse.add_argument('--attack-ratio', type=float, default=float(1.0), help="Attack ratio. The percentage of the time steps where we apply adversarial attacks")
     parse.add_argument('--alternate-attack', action='store_true', help="Alternate between attack and no attack with attack duration")
     parse.add_argument('--attacker-game-plays', type=int, default=int(0), help='the total number of independent game plays in training time for attack')
