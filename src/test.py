@@ -247,7 +247,7 @@ def test(args):
                     time_agent[game_id - args.attacker_game_plays] = time_agent[game_id - args.attacker_game_plays] / frame_idx_ingame
                 if args.detection_method != "none" and game_id >= args.attacker_game_plays:
                     total_alarms[game_id - args.attacker_game_plays] = detect_mod.is_alarmed()
-                    detect_mod.save_and_clean(info[0]['episode']['r'], args.eps)
+                    detect_mod.save_and_clean(info[0]['episode']['r'], detect_mod.eps)
                 print('Game id: {}, score: {}, total number of state-action pairs: {}'.format(game_id+1,
                                                                                               info[0]['episode']['r'],
                                                                                               frame_idx_ingame))

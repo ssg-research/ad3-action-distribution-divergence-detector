@@ -13,10 +13,10 @@ class base_agent:
         else:
             agent_mode = args.attacker_agent_mode
 
-        if agent_mode == 'dqn' and args.use_dueling:
-            model_name = 'ddqn'
-        else:
-            model_name = agent_mode
+        #if agent_mode == 'dqn' and args.use_dueling:
+        #    model_name = 'ddqn'
+        #else:
+        model_name = agent_mode
         
         if args.game_mode == "train":
             self.model_path = "./output/" + args.env_name + "/" + model_name + "/" + args.game_mode + "/"

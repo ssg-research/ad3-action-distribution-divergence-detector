@@ -1,16 +1,3 @@
-
-# Authors: Shelly Wang, Buse G. A. Tekgul
-# Copyright 2020 Secure Systems Group, Aalto University, https://ssg.aalto.fi
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#     http://www.apache.org/licenses/LICENSE-2.0
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import collections
 import os
 import scipy
@@ -48,8 +35,8 @@ class DetectionModule:
         self.queue_size = args.queue_size
 
         self.reward_arr = []
-
-        self.attack_eps = 0.1
+        # Pre-computed masks in this repo are all within the epsilon 0.01 bound. 
+        self.eps = 0.01
 
         if self.technique == "VF":
             self.threshold = args.detect_threshold
@@ -61,7 +48,7 @@ class DetectionModule:
 
         self.detection_queue = collections.deque(maxlen=self.queue_size+1)
 
-        eps_dir_string = "-" + str(self.attack_eps) if args.adversary != "none" else ""
+        eps_dir_string = "-" + str(self.eps) if args.adversary != "none" else ""
 
         if self.is_training:
             root_dir = "detection_model/"
@@ -121,11 +108,11 @@ class DetectionModule:
         self.train.load_model_from_file(self.train_model_filename)
         self.test.setup_test(self.train)
 
-        print("Original train data:")
-        print(self.train.distribution)
+        #print("Original train data:")
+        #print(self.train.distribution)
 
-        print("Original test data:")
-        print(self.test.distribution)
+        #print("Original test data:")
+        #print(self.test.distribution)
 
         if not self.is_training:
             self.calculate_threshold()
@@ -210,8 +197,8 @@ class DetectionModule:
                 with open(alarm_filename, "wb") as f:
                     np.save(f, np.asarray(self.anomaly_alarm_arr))
 
-        print(self.anomaly_arr)
-        print(self.anomaly_alarm_arr)
+        #print(self.anomaly_arr)
+        #print(self.anomaly_alarm_arr)
         self.clean()
 
     def clean(self):

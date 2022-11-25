@@ -1,15 +1,3 @@
-# Authors: Shelly Wang, Buse G. A. Tekgul
-# Copyright 2020 Secure Systems Group, Aalto University, https://ssg.aalto.fi
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#     http://www.apache.org/licenses/LICENSE-2.0
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 from datetime import time
 import random
 
@@ -61,7 +49,7 @@ def train_detection_module(args):
 
             if 'episode' in info[0].keys():
                 print('Game id: {}, score: {}, total number of state-action pairs: {}'
-                      .format(game_id, info[0]['episode']['r'], frame_idx_ingame))
+                      .format(game_id+1, info[0]['episode']['r'], frame_idx_ingame))
                 break
 
     detect_mod.save_train_model()
@@ -102,8 +90,8 @@ def train_detection_module(args):
 
             if 'episode' in info[0].keys():
                 if args.detection_method != "none":
-                    detect_mod.save_and_clean(info[0]['episode']['r'], args.eps)
-                print('Game id: {}, score: {}, total number of state-action pairs: {}'.format(game_id,
+                    detect_mod.save_and_clean(info[0]['episode']['r'], detect_mod.eps)
+                print('Game id: {}, score: {}, total number of state-action pairs: {}'.format(game_id+1,
                                                                                               info[0]['episode'][
                                                                                                   'r'],
                                                                                               frame_idx_ingame))

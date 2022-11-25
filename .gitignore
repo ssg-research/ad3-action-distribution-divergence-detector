@@ -6,6 +6,7 @@ __pycache__/
 **/.DS_Store
 src/baselines
 src/output
+src/detection_model
 
 # C extensions
 *.so

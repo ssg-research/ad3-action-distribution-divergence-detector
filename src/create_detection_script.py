@@ -12,7 +12,7 @@ SEED = 1234
 
 ## All the possible scenarios
 ENV_NAMES = ["Pong", "Breakout", "Freeway"]
-ADVERSARIES = ["uaps", "uapf", "osfwu"]
+ADVERSARIES = ["none", "uaps", "uapo", "osfwu"]
 
 
 AGENTS = ["a2c", "dqn", "ppo"]
@@ -68,8 +68,9 @@ with open(FILENAME, "w") as f:
         if env == "Freeway":
             base_line = " ".join([base_line, "--allow-early-resets True"])
 
-        eps_att = EPS_ATTACK_RATIO[env]
-        base_line = " ".join([base_line, "--eps", eps_att[0], "--attack-ratio", eps_att[1]])
+        #eps_att = EPS_ATTACK_RATIO[env]
+        #base_line = " ".join([base_line, "--eps", eps_att[0], "--attack-ratio", eps_att[1]])
+        base_line = " ".join([base_line, "--load-from", "trained_agents/" + env + "/" + agent + "/" + "model.pt" ])
 
         for det_game in DETECTION_GAMES_PLAYS:
 
