@@ -26,11 +26,12 @@ from rl_utils.utils import set_seeds
 from rl_utils.atari_wrapper import make_vec_envs
 from agents import action_conditional_video_prediction as acvp
 
-def attack(env, victim_agent_mode, obs, device, attack_type=None):
-    if attack_type is not None:
-        path_to_mask = "universal_noise_masks/" +   "victim_" + victim_agent_mode + "_" + attack_type + ".npy"
-        mask = torch.load(path_to_mask, map_location=device)['advmask']
-        obs_adv = torch.clamp(obs+self.advmask, 0.0, 255.0)
+def attack(env, victim_agent_mode, obs, device, adversary=None):
+    if adversary!= "none":
+        "load the previously saved adversarial mask for the correct game, agent and adversary type"
+        path_to_mask = "universal_noise_masks/" + env + "/" + "victim_" + victim_agent_mode + "_" + adversary + ".npy"
+        advmask = torch.load(path_to_mask, map_location=device)["advmask"]
+        obs_adv = torch.clamp(obs+advmask, 0.0, 255.0)
         return obs_adv
     obs_adv = obs.clone()
     return obs_adv
@@ -182,7 +183,7 @@ def test(args):
             #if is_attacking:
             #    obs_adv, time_attack_val = adv.attack(obs, frame_idx_ingame, agent)
             #else:
-            obs_adv = adv.attack(args.env_name, args.victim_agent_mode, obs, device, attack_type=args.attack_type)
+            obs_adv = attack(args.env_name, args.victim_agent_mode, obs, device, adversary=args.adversary)
 
             # Victim, select actions
             action, original_action, action_distribution, action_change_val, time_agent_val = act(obs, obs_adv,

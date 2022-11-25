@@ -49,6 +49,8 @@ class DetectionModule:
 
         self.reward_arr = []
 
+        self.attack_eps = 0.1
+
         if self.technique == "VF":
             self.threshold = args.detect_threshold
         else:
@@ -59,7 +61,7 @@ class DetectionModule:
 
         self.detection_queue = collections.deque(maxlen=self.queue_size+1)
 
-        eps_dir_string = "-" + str(args.eps) if args.adversary != "none" else ""
+        eps_dir_string = "-" + str(self.attack_eps) if args.adversary != "none" else ""
 
         if self.is_training:
             root_dir = "detection_model/"
