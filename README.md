@@ -30,7 +30,7 @@ DQN, A2C and PPO agents are implemented for Atari 2600 Games task. We have prepa
 Once you have trained agents, you can deploy them in a test environment, sample training and test codes,:
 ```
 python  main.py  --env-name Pong --game-mode train --victim-agent-mode dqn
-python  main.py  --env-name Pong --game-mode test  --victim-agent-mode dqn --load-from trained_agents/Pong/ddqn/model.pt 
+python  main.py  --env-name Pong --game-mode test  --victim-agent-mode dqn --load-from trained_agents/Pong/dqn/model.pt 
 python  main.py  --env-name Breakout --game-mode train --victim-agent-mode a2c 
 python  main.py  --env-name Freeway  --game-mode test  --victim-agent-mode ppo --load-from trained_agents/Freeway/ppo/model.pt --allow-early-resets True
 ```

@@ -128,7 +128,6 @@ class DetectionModule:
         self.training_list.clear()
 
         training_filenames = glob.glob(self.training_game_data_filename)
-        print("Total training game files:{}".format(training_filenames))
 
         for file in training_filenames:
             with open(file, 'rb') as f:
@@ -157,7 +156,8 @@ class DetectionModule:
         # get threshold by taking the x percentile of max anomaly score
         self.threshold = np.percentile(normal_data_matrix, self.percentile)
 
-        print("Percentile: {}  Threshold: {}".format(self.percentile, self.threshold))
+        print("Percentile for KL-divergence values: {}, " 
+                "Threshold for anomaly detection: {:.4f}".format(self.percentile, self.threshold))
 
     def save_and_clean(self, reward, eps):
 

@@ -17,6 +17,8 @@ def train_detection_module(args):
     games_to_play = (args.detection_game_plays * 2)
 
     # first play multiple games to collect "normal" agent behaviour
+    print("Calculate and store CAPD for {} normal episodes, " 
+            "game {}, agent {}".format(args.detection_game_plays, args.env_name, args.victim_agent_mode))
     for game_id in range(args.detection_game_plays):
         obs = env.reset()
         frame_idx_ingame = 0
@@ -57,6 +59,8 @@ def train_detection_module(args):
     detect_mod.load_train_model()
 
     # play more games to collect anomaly scores between normal games
+    print("Calculate CAPD for {} more normal episodes to set anomaly threshold, "
+                    "game {}, agent {}".format(args.detection_game_plays*2, args.env_name, args.victim_agent_mode))
     for game_id in range(games_to_play):
         obs = env.reset()
         frame_idx_ingame = 0

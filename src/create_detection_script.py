@@ -11,7 +11,7 @@ FILENAME = "detection_experiments.sh"
 SEED = 1234
 
 ## All the possible scenarios
-ENV_NAMES = ["Pong", "Breakout", "Freeway"]
+ENV_NAMES = ["Pong", "Freeway"]
 ADVERSARIES = ["none", "uaps", "uapo", "osfwu"]
 
 
@@ -19,18 +19,11 @@ AGENTS = ["a2c", "dqn", "ppo"]
 
 ATTACK_EPS = "0.01"
 
-## (epsilon, attack_ratio)
-EPS_ATTACK_RATIO = {
-    "Pong": (ATTACK_EPS, "1.0"),
-    "Breakout": (ATTACK_EPS, "1.0"),
-    "Freeway": (ATTACK_EPS, "1.0")
-}
-#
 key_val = {
     "Freeway": {
-        "dqn": '12-400-100-1.0-200',
-        "a2c": '12-300-100-0.8-100',
-        "ppo": '12-200-100-0.8-500'
+        "dqn": '12-400-95-0.8-100',#'12-400-100-1.0-200',
+        "a2c": '12-400-100-1.0-200', #'12-300-100-0.8-100',
+        "ppo": '12-200-90-0.9-200'  #'12-200-100-0.8-500'
     },
     "Pong": {
         "dqn": '12-400-100-0.9-200',
@@ -68,9 +61,7 @@ with open(FILENAME, "w") as f:
         if env == "Freeway":
             base_line = " ".join([base_line, "--allow-early-resets True"])
 
-        #eps_att = EPS_ATTACK_RATIO[env]
-        #base_line = " ".join([base_line, "--eps", eps_att[0], "--attack-ratio", eps_att[1]])
-        base_line = " ".join([base_line, "--load-from", "trained_agents/" + env + "/" + agent + "/" + "model.pt" ])
+        base_line = " ".join([base_line, "--load-from", "trained_agents/"+ env + "/" + agent + "/model.pt"])
 
         for det_game in DETECTION_GAMES_PLAYS:
 

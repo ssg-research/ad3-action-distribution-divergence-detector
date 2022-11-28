@@ -113,20 +113,21 @@ if __name__ == '__main__':
     if any(args.adversary in s for s in ["none", "uaps", "uapo", "osfwu"]) == False:
         print('Incorrect adversary type. Use --help')
         exit(1)
+    print("--------------------------------------------")
     print ("Selected environment: " + str(args.env_name))
     print ("Selected victim DRL algorithm: " + str(args.victim_agent_mode).upper())
-    print ("Selected mode: " + str(args.game_mode))
+    print ("Selected game: " + str(args.game_mode))
+    print ("Selected adversary type: " + str(args.adversary))
     print ("Visual foresight Defense: " + str(args.visual_foresight_defense))
-    print ("Detection method: " + str(args.detection_method))
 
     if args.detection_method != "none":
-        print("---Detection Parameters---")
-        print("Detection method train: " + str(args.detection_method_train))
-        print("Skipped frames: " + str(args.skipped_frames))
-        print("Percentile: " + str(args.percentile))
-        print("Alarm Percentage: " + str(args.alarm_percentage))
-        print("Queue size: " + str(args.queue_size))
-        print("Detection game plays: " + str(args.detection_game_plays))
+        print("--- AD3 Parameters ---")
+        print("AD3 method train: " + str(args.detection_method_train))
+        print ("AD3, selected detection mechanism: " + str(args.detection_method))
+        print("# of skipped frames in calculating KL-divergence between two CAPDs (t1): " + str(args.skipped_frames))
+        print("Percentile of KL-divergence for setting anomaly threshold (pt): " + str(args.percentile))
+        print("Alarm Percentage  to detect the adversary (r): " + str(args.alarm_percentage))
+        print("Sliding window size (# of frames, t2): " + str(args.queue_size))
 
     if args.game_mode == 'train':
         train(args)

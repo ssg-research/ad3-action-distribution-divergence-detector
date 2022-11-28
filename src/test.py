@@ -28,7 +28,7 @@ from agents import action_conditional_video_prediction as acvp
 
 def attack(env, victim_agent_mode, obs, device, adversary=None):
     if adversary!= "none":
-        "load the previously saved adversarial mask for the correct game, agent and adversary type"
+        #load the previously saved adversarial mask for the correct game, agent and adversary type
         path_to_mask = "universal_noise_masks/" + env + "/" + "victim_" + victim_agent_mode + "_" + adversary + ".npy"
         advmask = torch.load(path_to_mask, map_location=device)["advmask"]
         obs_adv = torch.clamp(obs+advmask, 0.0, 255.0)
@@ -275,9 +275,9 @@ def test(args):
 
         print("Average alarm: {}".format(np.mean(total_alarms)))
         logging.info("Average alarm: {}".format(np.mean(total_alarms)))
-        print("Average time for detection module: {} milisecs".format(np.mean(defense_time)))
-        logging.info("Average time for detection module: {} milisecs".format(np.mean(defense_time) ))
-        logging.info("Average time variance for detection module: {} milisecs".format(np.std(defense_time)))
+        print("Average time for detection module: {:.6f} secs".format(100*np.mean(defense_time)))
+        logging.info("Average time for detection module: {:.6f} secs".format(100* np.mean(defense_time) ))
+        logging.info("Average time variance for detection module: {:.6f} secs".format(100* np.std(defense_time)))
 
         print("Average game lost (with no detection): {}".format(np.mean(loose_game)))
         print("Average game lost (with detection): {}".format(np.mean(det_loose_game)))
@@ -291,6 +291,6 @@ def test(args):
         logging.info("Average game lost (with no detection): {}".format(np.mean(loose_game)))
 
     if args.visual_foresight_defense == True:
-        print("Average time for visual foresight defense: {} milisecs".format(np.mean(defense_time)))
-        logging.info("Average time for visual foresight defense: {} milisecs".format(np.mean(defense_time)))
-        logging.info("Average time variance for visual foresight defense: {} milisecs".format(np.std(defense_time)))
+        print("Average time for visual foresight defense: {} secs".format(100*np.mean(defense_time)))
+        logging.info("Average time for visual foresight defense: {} secs".format(100*np.mean(defense_time)))
+        logging.info("Average time variance for visual foresight defense: {} secs".format(100*np.std(defense_time)))
