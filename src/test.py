@@ -109,13 +109,8 @@ def setup_test_agent_env(args):
 
 
 def test(args):
-    #image_path, noise_path, reward_path, training_data_path, reward_step_path, detection_step_path = make_files_and_paths(
-    #    args)
-    #detection_step_path = args.env_name + '_rewards' + '/' + 'victim_' + args.victim_agent_mode + '_attacker_' + \
-    #                     '_ac' + str(args.action_threshold) + "_detection_per_steps_{}" + '.npy'
     logging.basicConfig(filename=(args.env_name + '_' + args.victim_agent_mode + '_' + 'measurements.log'),
                         level=logging.DEBUG)
-    # fstats = open(args.env_name + '_' + args.victim_agent_mode + '_' + 'distancestats.txt','a+')
 
     agent, device, env, masks, recurrent_hidden_states = setup_test_agent_env(args)
 
@@ -158,7 +153,7 @@ def test(args):
     predicted_action = None
     predicted_dist = None
 
-    print("start testing. Total game plays: {}".format(games_to_play))
+    print("Start testing. Total game plays: {}".format(games_to_play))
 
     for game_id in range(games_to_play):
         obs = env.reset()
@@ -178,11 +173,6 @@ def test(args):
             if args.render:
                 env.render()
 
-            # Adversary, generate perturbation mask if necessary
-            # adv.generate(obs, game_id, frame_idx_ingame, args.attacker_game_plays)
-            #if is_attacking:
-            #    obs_adv, time_attack_val = adv.attack(obs, frame_idx_ingame, agent)
-            #else:
             obs_adv = attack(args.env_name, args.victim_agent_mode, obs, device, adversary=args.adversary)
 
             # Victim, select actions
@@ -256,8 +246,6 @@ def test(args):
     env.close()
 
     # Measurements, save statistics to files, log and print
-    # TODO: Some results are shown as zero, check why
-    # np.save(reward_path, total_rewards)
     print("Average reward: {:.2f} std: {:.2f}".format(np.mean(total_rewards), np.std(total_rewards)))
     print("Tmax: {:.6f} secs".format(1.0/60.0 - np.mean(time_agent)))
     logging.info("Tmax: {:.6f} secs".format(1.0/60.0 - np.mean(time_agent)))

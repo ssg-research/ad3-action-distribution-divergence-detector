@@ -21,22 +21,16 @@ ATTACK_EPS = "0.01"
 
 key_val = {
     "Freeway": {
-        "dqn": '12-400-95-0.8-100',#'12-400-100-1.0-200',
-        "a2c": '12-400-100-1.0-200', #'12-300-100-0.8-100',
-        "ppo": '12-200-90-0.9-200'  #'12-200-100-0.8-500'
+        "dqn": '12-400-95-0.8-100',
+        "a2c": '12-400-100-1.0-200',
+        "ppo": '12-200-90-0.9-200'
     },
     "Pong": {
         "dqn": '12-400-100-0.9-200',
         "a2c": '12-400-100-0.9-200',
         "ppo": '12-400-100-0.9-200'
 
-    },
-    "Breakout": {
-        "dqn": "12-200-100-1.0-100",
-        "a2c": "12-100-100-0.9-100",
-        "ppo": "12-100-100-0.9-100"
     }
-
 }
 
 
@@ -70,10 +64,6 @@ with open(FILENAME, "w") as f:
                                           "--detection-game-plays", det_game, "--seed", str(SEED)])
                 f.write(training_line + "\n")
 
-            # for skip_frame, percentile, alarm_perc, queue_size in \
-            #         itertools.product(SKIPPED_FRAMES, PERCENTILES, ALARM_PERCENTAGES, QUEUE_SIZES):
-
-            #for key_str in key_val:
             key_str = key_val[env][agent]
             game, skip_frame, percentile, alarm_perc, queue_size = parse_key(key_str)
 

@@ -117,7 +117,7 @@ if __name__ == '__main__':
     print ("Selected environment: " + str(args.env_name))
     print ("Selected victim DRL algorithm: " + str(args.victim_agent_mode).upper())
     print ("Selected game: " + str(args.game_mode))
-    print ("Selected adversary type: " + str(args.adversary))
+    print ("Selected adversary type: " + str(args.adversary).upper())
     print ("Visual foresight Defense: " + str(args.visual_foresight_defense))
 
     if args.detection_method != "none":
