@@ -7,7 +7,7 @@ DISCLAIMER: The provided source code does NOT include experiments with the gener
 - [x] All [victim agents](https://github.com/ssg-research/ad3-action-distribution-divergence-detector/tree/main/src/trained_agents) in the paper and the code to re-train victim agents from scratch
 - [x] The AD<sup>3</sup> algorithm 
 - [x] Pre-generated universal adversarial masks ([UAP-S, UAP-O, OSFW(U)](https://github.com/ssg-research/ad3-action-distribution-divergence-detector/tree/main/src/universal_noise_masks)) to evaluate AD<sup>3</sup>.
-- [ ] [visual foresight](https://arxiv.org/abs/1702.02284) modules and the code to train these modules from scratch (not checked throughly yet)
+- [ ] [Visual foresight](https://arxiv.org/abs/1702.02284) modules and the code to train these modules from scratch (not checked throughly yet)
 * Please refer to the [original repository](https://github.com/chenhongge/SA_DQN) for the code and State-Adversarial DQN models used in our paper. 
 
 ### Acknowledgements
@@ -43,7 +43,7 @@ python main.py --game-mode test --env-name Pong --adversary uaps --victim-agent-
 python main.py --game-mode test --env-name Freeway --adversary osfwu --victim-agent-mode dqn --allow-early-resets True --load-from trained_agents/Freeway/dqn/model.pt --total-game-plays 20
 ```
 
-<br />An Example Result on Pong DQN agents:<br />
+<br />An Example Result of AD<sup>3</sup> Pong DQN agents:<br />
 <img src="images/Pong_plot.png" width="400">
 
 ## Licence
