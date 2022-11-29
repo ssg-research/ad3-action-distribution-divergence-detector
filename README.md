@@ -1,8 +1,8 @@
 # AD<sup>3</sup>-action-distribution-divergence-detector
 
-This repo contains the code to reproduce experiments for the detection scheme presented in *Real-time Adversarial Perturbations against Deep Reinforcement Learning Policies: Attacks and Defenses* ([arXiv report](https://arxiv.org/abs/2106.08746)). The paper will appear in the Proceedings of ESORICS 2022.
+This repo contains the code to reproduce experiments for the detection scheme presented in *Real-time Adversarial Perturbations against Deep Reinforcement Learning Policies: Attacks and Defenses* ([arXiv report](https://arxiv.org/abs/2106.08746)). The paper appears in the Proceedings of ESORICS 2022.
 
-DISCLAIMER: The provided source code does NOT include experiments with the generation of universal adversarial perturbations. Usage and distribution of such code is potentially harmful and should be done separately at their authors' disclosure. In this repo we provide:
+DISCLAIMER: The provided source code **does NOT include** experiments with the generation of universal adversarial perturbations. Usage and distribution of such code is potentially harmful and should be done separately at their authors' disclosure. **Please contact authors** to get the attack part of the code separately and sign a terms of use document by email. In this repo we provide:
 
 - [x] All [victim agents](https://github.com/ssg-research/ad3-action-distribution-divergence-detector/tree/main/src/trained_agents) in the paper and the code to re-train victim agents from scratch
 - [x] The AD<sup>3</sup> algorithm 
